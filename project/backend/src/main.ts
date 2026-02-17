@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ExpressAdapter } from '@nestjs/platform-express';
-import express from 'express'; // Change: Use default import
+import express from 'express'; // REMOVE the asterisk (* as)
 
 const server = express();
 
@@ -14,7 +14,6 @@ export const createServer = async (expressInstance: any) => {
   await app.init();
   return app;
 };
-
 // Vercel Serverless Handler
 export default async (req: any, res: any) => {
   await createServer(server);
