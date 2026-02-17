@@ -1,3 +1,14 @@
-const app = await NestFactory.create(AppModule);
-app.enableCors(); // Essential for React communication
-await app.listen(3000);
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+
+async function bootstrap() {
+  const app = await NestFactory.create(AppModule);
+  
+  // This enables your React frontend to talk to this API
+  app.enableCors(); 
+  
+  await app.listen(3000);
+  console.log('Application is running on: http://localhost:3000');
+}
+
+bootstrap();
