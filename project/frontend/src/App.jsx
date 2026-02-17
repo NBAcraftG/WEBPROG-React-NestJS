@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const API = 'http://localhost:3000/guestbook';
+const API = '/api/guestbook';
 
 function App() {
   const [messages, setMessages] = useState([]);

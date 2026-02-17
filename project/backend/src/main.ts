@@ -1,14 +1,22 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { ExpressAdapter } from '@nestjs/platform-express';
+import express from 'express'; // Change: Use default import
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  
-  // This enables your React frontend to talk to this API
-  app.enableCors(); 
-  
-  await app.listen(3000);
-  console.log('Application is running on: http://localhost:3000');
-}
+const server = express();
 
-bootstrap();
+export const createServer = async (expressInstance: any) => {
+  const app = await NestFactory.create(
+    AppModule,
+    new ExpressAdapter(expressInstance),
+  );
+  app.enableCors();
+  await app.init();
+  return app;
+};
+
+// Vercel Serverless Handler
+export default async (req: any, res: any) => {
+  await createServer(server);
+  server(req, res);
+};
