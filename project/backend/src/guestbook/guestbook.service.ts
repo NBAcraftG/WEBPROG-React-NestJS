@@ -7,6 +7,8 @@ export class GuestbookService {
 
   constructor() {
     this.supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
+    console.log("Supabase URL exists:", !!process.env.SUPABASE_URL);
+    console.log("Supabase Key exists:", !!process.env.SUPABASE_KEY);
   }
 
   async findAll() {
