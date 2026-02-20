@@ -32,4 +32,24 @@ export class GuestbookService {
     const { data } = await this.supabase.from('guestbook').delete().eq('id', id);
     return data;
   }
+  async delete(id: string) {
+    const { data, error } = await this.supabase
+      .from('guestbook')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw new Error(error.message);
+    return data;
+  }
+
+  async update(id: string, message: string) {
+    const { data, error } = await this.supabase
+      .from('guestbook')
+      .update({ message })
+      .eq('id', id);
+
+    if (error) throw new Error(error.message);
+    return data;
+  }
+}
 }
