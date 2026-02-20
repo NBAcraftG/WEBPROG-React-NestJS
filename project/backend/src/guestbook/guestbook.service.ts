@@ -3,35 +3,26 @@ import { createClient } from '@supabase/supabase-js';
 
 @Injectable()
 export class GuestbookService {
-    private supabase = createClient(
+  private supabase = createClient(
     process.env.SUPABASE_URL!, 
     process.env.SUPABASE_KEY!
   );
 
- async findAll() {
+  async findAll() {
     const { data, error } = await this.supabase
       .from('guestbook')
       .select('*')
       .order('created_at', { ascending: false });
+    
+    if (error) throw new Error(error.message);
     return data;
   }
 
   async create(payload: { name: string; message: string }) {
     const { data, error } = await this.supabase
       .from('guestbook')
-      .insert([payload]);
-    return data;
-  }
-
-  async remove(id: string) {
-    const { data } = await this.supabase.from('guestbook').delete().eq('id', id);
-    return data;
-  }
-  async delete(id: string) {
-    const { data, error } = await this.supabase
-      .from('guestbook')
-      .delete()
-      .eq('id', id);
+      .insert([payload])
+      .select();
 
     if (error) throw new Error(error.message);
     return data;
@@ -46,5 +37,14 @@ export class GuestbookService {
     if (error) throw new Error(error.message);
     return data;
   }
-}
+
+  async delete(id: string) {
+    const { data, error } = await this.supabase
+      .from('guestbook')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw new Error(error.message);
+    return data;
+  }
 }
