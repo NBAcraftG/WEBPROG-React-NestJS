@@ -1,23 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
 
 @Injectable()
 export class GuestbookService {
-  private supabase: SupabaseClient;
+    private supabase = createClient(
+    process.env.SUPABASE_URL!, 
+    process.env.SUPABASE_KEY!
+  );
 
-  constructor() {
-    this.supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
-    console.log("Supabase URL exists:", !!process.env.SUPABASE_URL);
-    console.log("Supabase Key exists:", !!process.env.SUPABASE_KEY);
-  }
-
-  async findAll() {
-    const { data } = await this.supabase.from('guestbook').select('*').order('created_at', { ascending: false });
+ async findAll() {
+    const { data, error } = await this.supabase
+      .from('guestbook')
+      .select('*')
+      .order('created_at', { ascending: false });
     return data;
   }
 
-  async create(payload: any) {
-    const { data } = await this.supabase.from('guestbook').insert([payload]).select();
+  async create(payload: { name: string; message: string }) {
+    const { data, error } = await this.supabase
+      .from('guestbook')
+      .insert([payload]);
     return data;
   }
 
