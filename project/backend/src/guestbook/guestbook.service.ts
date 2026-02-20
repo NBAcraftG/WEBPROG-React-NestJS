@@ -23,11 +23,6 @@ export class GuestbookService {
     return data;
   }
 
-  async update(id: string, payload: any) {
-    const { data } = await this.supabase.from('guestbook').update(payload).eq('id', id).select();
-    return data;
-  }
-
   async remove(id: string) {
     const { data } = await this.supabase.from('guestbook').delete().eq('id', id);
     return data;
